@@ -12,7 +12,7 @@
         "doctrine/doctrine-bundle": "^2.3",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.8",
-        "easycorp/easyadmin-bundle": "^3",
+        "easycorp/easyadmin-bundle": "^3.3",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.2.*",
@@ -42,6 +42,7 @@
         "symfony/webpack-encore-bundle": "^1.11",
         "symfony/yaml": "5.2.*",
         "symfonycasts/verify-email-bundle": "^1.5",
+        "twbs/bootstrap": "^5.0",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },

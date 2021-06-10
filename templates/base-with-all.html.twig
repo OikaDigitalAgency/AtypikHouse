@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+
+{% block classBody %} app sidebar-mini {% endblock %}
+{% block body %}
+
+
+<div class="main-content app-content">
+
+
+{% include 'partials/navbar.html.twig' %}
+			<!-- container -->
+			<div class="container-fluid">
+
+
+				<!-- breadcrumb -->
+				{% include 'partials/breadcrumb-header.html.twig' %}
+				<!-- breadcrumb -->
+				{% block alert %}
+				{% endblock %}
+				<!-- row -->
+				<div class="row row-sm">
+					{% block content %}
+					{% endblock %}
+
+				</div>
+				<!-- row closed -->
+			</div>
+			<!-- Container closed -->
+		</div>
+		<!-- main-content closed -->
+
+{% include 'partials/footer.html.twig' %}
+	<footer class="tm-bg-dark-blue">
+		<div class="container">
+			<div class="row">
+				<p class="col-sm-12 text-center tm-font-light tm-color-white p-4 tm-margin-b-0">
+					Copyright &copy; <span class="tm-current-year">2021</span> With &#9825; By OIQA Agency</p>
+			</div>
+		</div>
+	</footer>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('/assets/themes/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+<script src="{{ asset('/assets/themes/plugins/mscrollbar/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+<script src="{{ asset('/assets/themes/plugins/side-menu/sidemenu.js') }}"></script>
+<script src="{{ asset('/assets/themes/plugins/sidebar/sidebar.js') }}"></script>
+<script src="{{ asset('/assets/themes/plugins/sidebar/sidebar-custom.js') }}"></script><script src="{{ asset('/assets/themes/js/sticky.js') }}"></script>
+
+{% block js %}
+{% endblock %}
+
+{% endblock %}

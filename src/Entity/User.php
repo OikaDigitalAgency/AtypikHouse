@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
@@ -32,7 +33,7 @@ class User implements UserInterface, EncoderAwareInterface
      *
      * @ORM\Column(name="type", type="boolean", nullable=true)
      */
-    private bool $type;
+    private bool $isActive;
 
     /**
      * @var string
@@ -101,6 +102,48 @@ class User implements UserInterface, EncoderAwareInterface
      */
     private bool $isVerified = false;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?DateTime $creationDate;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?DateTime $lastLogin;
+
+
+    /**
+     * @return DateTime
+     */
+    public function getCreationDate(): DateTime
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * @param DateTime $creationDate
+     */
+    public function setCreationDate(DateTime $creationDate): void
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getLastLogin(): DateTime
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * @param DateTime $lastLogin
+     */
+    public function setLastLogin(DateTime $lastLogin): void
+    {
+        $this->lastLogin = $lastLogin;
+    }
 
     public function getPlainPassword(): ?string
     {
@@ -117,14 +160,14 @@ class User implements UserInterface, EncoderAwareInterface
         return $this->id;
     }
 
-    public function getType(): ?bool
+    public function getIsActive(): ?bool
     {
-        return $this->type;
+        return $this->isActive;
     }
 
-    public function setType(bool $type): self
+    public function setIsActive(bool $isActive): self
     {
-        $this->type = $type;
+        $this->isActive = $isActive;
 
         return $this;
     }
@@ -230,6 +273,10 @@ class User implements UserInterface, EncoderAwareInterface
         $this->roles = $roles;
 
         return $this;
+    }
+
+    function addRole($role) {
+        $this->roles[] = $role;
     }
 
     public function getSalt()
