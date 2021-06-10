@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use http\Env\Request;
+use http\Exception\BadMessageException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,12 +40,8 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
-    /**
-     * @Route("/dashboard", name="app_homepage")
-     */
-    public function profile()
-    {
-        return $this->render('dashboard.html.twig');    }
+
+
 
 
 

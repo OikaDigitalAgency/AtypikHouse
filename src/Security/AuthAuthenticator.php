@@ -92,7 +92,7 @@ class AuthAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('app_homepage'));
+        return new RedirectResponse($this->urlGenerator->generate('homepage'));
        // return new RedirectResponse($this->urlGenerator->generate('/dashboard'));
         //throw new Exception('TODO: provide a valid redirect inside '.__FILE__);
     }

@@ -27,14 +27,20 @@ class RegistrationFormType extends AbstractType
             ->add('address', TextType::class)
             ->add('zipcode')
             ->add('city', TextType::class)
-
-            ->add('plainPassword', RepeatedType::class, ["required" => false, "type" => PasswordType::class])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
+            ->add('plainPassword', RepeatedType::class, [
+                'required' => true,
+                'type' => PasswordType::class,
+                'invalid_message' => 'The password fields must match.' ,
+                'options' => ['attr' =>['class' =>'password-field']],
                 'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                    new NotBlank([
+                        'message' => 'Please enter a password'
                     ]),
+                    new Length([
+                        'min' =>6,
+                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'max' => 4096,
+                        ]),
                 ],
             ])
             ->add('save', SubmitType::class)

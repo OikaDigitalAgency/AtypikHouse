@@ -37,6 +37,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->addRole("ROLE_USER");
             // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
@@ -44,12 +45,22 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+            $user->setIsActive(true);
+            $user->setCreationDate(new \DateTime());
+            $user->setLastLogin(new  \DateTime());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
+            /*
+             *      $result = $this->sendMail($mailer, array(
+                    'email' => $user->getEmail(),
+                    'token' => $user->getTokenUser(),
+                    'prenom' => $user->getPrenom()
+                ));
+             */
+
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('contact@atypik.com', 'test'))
@@ -71,6 +82,7 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+
 
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request): Response
