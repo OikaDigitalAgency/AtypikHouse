@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="booking", indexes={@ORM\Index(name="booking_id_user", columns={"ID_user"}), @ORM\Index(name="booking_id_house", columns={"ID_house"})})
  * @ORM\Entity
  */
+#[ApiResource]
 class Booking
 {
     /**

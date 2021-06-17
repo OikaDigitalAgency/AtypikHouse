@@ -7,7 +7,7 @@ security:
         ROLE_USER: ROLE_USER
         ROLE_ADMIN: ROLE_ADMIN
     providers:
-        users:
+        app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
@@ -19,13 +19,16 @@ security:
             pattern: ^/api/login
             stateless: true
             anonymous: true
+            provider: app_user_provider
             json_login:
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         api:
             pattern: ^/api
+            provider: app_user_provider
             stateless: true
+            anonymous: true
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
@@ -54,5 +57,5 @@ security:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/profile, roles: ROLE_USER }
          - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/api,       roles: IS_AUTHENTICATED_ANONYMOUSLY }

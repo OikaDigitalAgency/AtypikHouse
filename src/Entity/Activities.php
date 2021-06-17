@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="activities", indexes={@ORM\Index(name="ID_type", columns={"ID_type"})})
  * @ORM\Entity
  */
+#[ApiResource]
 class Activities
 {
     /**

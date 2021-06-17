@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Firebase\JWT\JWT;
-use http\Env\Request;
+use Symfony\Component\HttpFoundation\Request;
 use http\Exception\BadMessageException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,12 +21,19 @@ class SecurityController extends AbstractController
 
 
     #[Route(path: '/api/login_check', name: 'api_login', methods: ['POST'])]
-    public function login(): JsonResponse
+    public function login( UserRepository $userRepository, Request $request, UserPasswordEncoderInterface $encoder): JsonResponse
     {
-        $user = $this->getUser();
+        $user = $userRepository->findOneBy([
+            'email'=>$request->get('email'),
+        ]);
+        if (!$user || !$encoder->isPasswordValid($user, $request->get('password'))) {
+            return $this->json([
+                'message' => 'email or password is wrong.',
+            ]);
+        }
         return $this->json([
-            'username' => $user->getUsername(),
-            'roles' => $user->getRoles(),
+            'message' => 'success!',
+            'token' => 'Bearer %s',
         ]);
     }
 

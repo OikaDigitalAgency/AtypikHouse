@@ -2,11 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Action\NotFoundAction;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\MeController;
+use App\Controller\ProfileController;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -19,6 +24,30 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     fields={"email"},
  *     message="Adresse mail déjà utilisé")
  */
+#[ApiResource(
+    collectionOperations: [
+    'profile' => [
+        'pagination_enabled' => false,
+        'path' => '/profile',
+        'method' => 'get',
+        'controller' => ProfileController::class,
+        'read' => false,
+        'openapi_context' => [
+            'security' => [['bearerAuth' => []]]
+        ]
+    ]
+],
+    itemOperations: [
+    'get' => [
+        'controller' => NotFoundAction::class,
+        'openapi_context' => ['summary' => 'hidden'],
+        'read' => false,
+        'output' => false
+    ]
+],
+    normalizationContext: ['groups' => ['read:User']],
+    security: 'is_granted("ROLE_USER")',
+)]
 class User implements UserInterface, EncoderAwareInterface
 {
     /**
@@ -28,6 +57,7 @@ class User implements UserInterface, EncoderAwareInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[Groups(['read:User'])]
     private $id;
 
     /**
@@ -43,6 +73,7 @@ class User implements UserInterface, EncoderAwareInterface
      * @Assert\NotBlank()
      * @Assert\Email(message="Le format de l'email '{{ value }}' est incorrect")
      */
+    #[Groups(['read:User'])]
     private string $email;
 
     /**
@@ -135,6 +166,7 @@ class User implements UserInterface, EncoderAwareInterface
     /**
      * @ORM\Column(type="json")
      */
+    #[Groups(['read:User'])]
     private array $roles = [];
 
     /**

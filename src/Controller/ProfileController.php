@@ -22,10 +22,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  */
 class ProfileController extends AbstractController
 {
+    public function __construct(private \Symfony\Component\Security\Core\Security $security)
+    {
+    }
+    public function __invoke()
+    {
+        $user = $this->security->getUser();
+        return $user;
+    }
+
     /**
      * Show the user.
      * @return Response
-     * @Route("/profile", name="profil", methods="post|get")
+     * @Route("/profilee", name="profil", methods="post|get")
      * @IsGranted("ROLE_USER")
      */
     public function showAction(Request $request): Response

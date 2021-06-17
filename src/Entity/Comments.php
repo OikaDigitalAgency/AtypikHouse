@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="comments", indexes={@ORM\Index(name="comment_id_booking", columns={"ID_booking"}), @ORM\Index(name="comment_id_user", columns={"ID_user"})})
  * @ORM\Entity
  */
+#[ApiResource]
 class Comments
 {
     /**
