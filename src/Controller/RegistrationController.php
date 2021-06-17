@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Posts;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
@@ -16,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\Mailer\Mailer;
 
 class RegistrationController extends AbstractController
 {
@@ -29,8 +31,8 @@ class RegistrationController extends AbstractController
 
     }
 
-    #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AuthAuthenticator $authenticator): Response
+    #[Route('/register', name: 'app_register', methods: ["POST"])]
+    public function register(Request $request,MailerInterface $mailer, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AuthAuthenticator $authenticator): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -53,18 +55,10 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            /*
-             *      $result = $this->sendMail($mailer, array(
-                    'email' => $user->getEmail(),
-                    'token' => $user->getTokenUser(),
-                    'prenom' => $user->getPrenom()
-                ));
-             */
-
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
-                    ->from(new Address('contact@atypik.com', 'test'))
-                    ->to($user->getEmail())
+                    ->from()
+                    ->to($form->get('email')->getData())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
@@ -82,7 +76,6 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
-
 
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request): Response

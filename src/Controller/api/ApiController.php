@@ -29,7 +29,7 @@ class ApiController extends AbstractController
                 $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $request->request->get('username')]);
                 if(!empty($user) && !empty($request->request->get('password'))) {
                     if($passwordEncoder->isPasswordValid($user, $request->request->get('password'))) {
-                        $dataUser = ['id' => $user->getId(), 'nom' => $user->getNom(), 'prenom' => $user->getPrenom(), 'adresse' => $user->getAdresse(), 'email' => $user->getEmail()];
+                        $dataUser = ['id' => $user->getId(), 'nom' => $user->getName(), 'prenom' => $user->getFirstname(), 'adresse' => $user->getAdresse(), 'email' => $user->getEmail()];
                         $response->setStatusCode(200);
                         $response->setContent(json_encode($dataUser));
                     } else {

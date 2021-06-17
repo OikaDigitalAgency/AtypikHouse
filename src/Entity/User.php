@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * User
@@ -15,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity
  * @UniqueEntity(
  *     fields={"email"},
- *     message="There is already an account with this email")
+ *     message="Adresse mail déjà utilisé")
  */
 class User implements UserInterface, EncoderAwareInterface
 {
@@ -37,8 +39,9 @@ class User implements UserInterface, EncoderAwareInterface
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     * @ORM\Column(name="email", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Email(message="Le format de l'email '{{ value }}' est incorrect")
      */
     private string $email;
 
@@ -58,22 +61,45 @@ class User implements UserInterface, EncoderAwareInterface
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="lastname", type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      min = 2,
+     *      minMessage = "Le nom doit avoir au minimum 2 lettres ?"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[a-z\s+a-z+ÖØ-öø-ÿ]+$/i",
+     *     message="Votre nom ne doit pas comporter de chiffre et ni de symbole"
+     * )
      */
-    private string $name;
+    private string $lastname;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="firstname", type="string", length=255, nullable=false)
+     * @ORM\Column(name="firstname", type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      min = 2,
+     *      minMessage = "Le prénom doit avoir au minimum 2 lettres ?"
+     * )
+     * @Assert\Regex(
+     *     pattern="/^[a-z\s+a-z+ÖØ-öø-ÿ]+$/i",
+     *     message="Votre prénom ne doit pas comporter de chiffre et ni de symbole"
+     * )
      */
     private string $firstname;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="address", type="string", length=255, nullable=false)
+     * @ORM\Column(name="address", type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Type("string")
+     * @Assert\Length(
+     *      min = 5,
+     *      minMessage = "Avez vous bien saisi votre adresse ?"
+     * )
      */
     private string $address;
 
@@ -91,6 +117,20 @@ class User implements UserInterface, EncoderAwareInterface
      */
     private string $city;
 
+    /**
+     * @ORM\Column(name="phone", type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Regex(
+     *     pattern="/^[0-9]+$/i",
+     *     message="Veuillez saisir seulement des chiffres"
+     * )
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 10,
+     *      maxMessage = "Le numéro de téléphone est incorrecte, exemple à saisir : 0102030405"
+     * )
+     */
+    private $phone;
 
     /**
      * @ORM\Column(type="json")
@@ -127,6 +167,22 @@ class User implements UserInterface, EncoderAwareInterface
     public function setCreationDate(DateTime $creationDate): void
     {
         $this->creationDate = $creationDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param mixed $phone
+     */
+    public function setPhone($phone): void
+    {
+        $this->phone = $phone;
     }
 
     /**
@@ -196,14 +252,14 @@ class User implements UserInterface, EncoderAwareInterface
         return $this;
     }
 
-    public function getName(): ?string
+    public function getLastName(): ?string
     {
-        return $this->name;
+        return $this->lastname;
     }
 
-    public function setName(string $name): self
+    public function setLasName(string $lastname): self
     {
-        $this->name = $name;
+        $this->lastname = $lastname;
 
         return $this;
     }

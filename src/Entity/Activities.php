@@ -57,7 +57,7 @@ class Activities
     private $listidTags;
 
     /**
-     * @var \ActivitiesTypes
+     * @var ActivitiesTypes
      *
      * @ORM\ManyToOne(targetEntity="ActivitiesTypes")
      * @ORM\JoinColumns({
