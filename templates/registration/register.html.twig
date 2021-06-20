@@ -35,7 +35,7 @@
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user">Nom</i></span>
                             </div>
                             {% if not registrationForm.lastname.vars.valid %}
                                 <div class="alert alert-danger">
@@ -49,7 +49,7 @@
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user">Prénom</i></span>
                             </div>
                             {% if not registrationForm.firstname.vars.valid %}
                                 <div class="alert alert-danger">
@@ -62,7 +62,7 @@
 
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                <span class="input-group-text"><i class="fa fa-envelope">Email</i></span>
                             </div>
                             {% if not registrationForm.email.vars.valid %}
                                 <div class="alert alert-danger">
@@ -75,7 +75,7 @@
                         </div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                <span class="input-group-text"><i class="fas fa-key">Mot de passe</i></span>
                             </div>
                             {% if not registrationForm.plainPassword.first.vars.valid %}
                                 <div class="alert alert-danger">
@@ -87,7 +87,7 @@
                         </div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                <span class="input-group-text"><i class="fas fa-key">Confirmer mot de passe</i></span>
                             </div>
                             {% if not registrationForm.plainPassword.second.vars.valid %}
                                 <div class="alert alert-danger">
@@ -100,7 +100,7 @@
                         </div>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-home"></i></span>
+                            <span class="input-group-text"><i class="fa fa-home">Numero de telephone</i></span>
                         </div>
                         {% if not registrationForm.phone.vars.valid %}
                             <div class="alert alert-danger">
@@ -114,7 +114,7 @@
                     </div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-home"></i></span>
+                                <span class="input-group-text"><i class="fa fa-home">Adress</i></span>
                             </div>
                             {% if not registrationForm.address.vars.valid %}
                                 <div class="alert alert-danger">
@@ -128,7 +128,7 @@
                         </div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-address-card"></i></span>
+                                <span class="input-group-text"><i class="fa fa-address-card">Code Postal</i></span>
                             </div>
                             {% if not registrationForm.zipcode.vars.valid %}
                                 <div class="alert alert-danger">
@@ -141,7 +141,7 @@
                         </div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                <span class="input-group-text"><i class="fas fa-city">Ville</i></span>
                             </div>
                             {% if not registrationForm.city.vars.valid %}
                                 <div class="alert alert-danger">

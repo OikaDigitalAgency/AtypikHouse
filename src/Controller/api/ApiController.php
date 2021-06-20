@@ -2,7 +2,10 @@
 
 namespace App\Controller\api;
 
+use App\Service\ApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +19,39 @@ use App\Entity\Categories;
  */
 class ApiController extends AbstractController
 {
+    /**
+     * @Route("/logged/user/profile", name="api_logged_user_profile",
+     *      methods={"GET"})
+     * @param ApiService $apiService
+     * @return JsonResponse|AccessDeniedHttpException
+     */
+    public function profile(ApiService $apiService)
+    {
+        $user = $this->getUser();
+        if (null == $user) {
+            throw new AccessDeniedHttpException("User not found");
+        }
+        return  new JsonResponse($apiService->getMakedConfiguration(
+            $user->__toArrayApi()
+        ), 200);
+    }
+
+    /**
+     * @Route("/user/logout", name="api_logged_user_logout", methods={"POST"})
+     * @param ApiService $userService
+     * @return JsonResponse|AccessDeniedHttpException
+     */
+    public function logout(ApiService $userService)
+    {
+        $user = $this->getUser();
+        if (null == $user) {
+            throw new AccessDeniedHttpException("User not found");
+        }
+        $response = $userService->logout($user);
+        return new JsonResponse($response["data"], $response["httpCode"]);
+    }
+
+
 
     /**
      * Permet d'authentifier un utilisateur dans l'application
@@ -24,12 +60,12 @@ class ApiController extends AbstractController
     public function connexion_post(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
-        if(!empty($request->request->get('tokenApi')) && $request->request->get('tokenApi') === $this->getParameter('api_token')) {
+        if(!empty($request->request->get('bearer')) && $request->request->get('bearer') === $this->getParameter('bearer')) {
             if(!empty($request->request->get('username'))) {
                 $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $request->request->get('username')]);
                 if(!empty($user) && !empty($request->request->get('password'))) {
                     if($passwordEncoder->isPasswordValid($user, $request->request->get('password'))) {
-                        $dataUser = ['id' => $user->getId(), 'nom' => $user->getName(), 'prenom' => $user->getFirstname(), 'adresse' => $user->getAdresse(), 'email' => $user->getEmail()];
+                        $dataUser = ['id' => $user->getId(), 'nom' => $user->getLastname(), 'prenom' => $user->getFirstname(), 'adresse' => $user->getAdresse(), 'email' => $user->getEmail()];
                         $response->setStatusCode(200);
                         $response->setContent(json_encode($dataUser));
                     } else {

@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
-use http\Exception\BadMessageException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,27 +14,31 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+/**
+ * @Route("/se_admin/auth")
+ */
 
 class SecurityController extends AbstractController
 {
 
-
-    #[Route(path: '/api/login_check', name: 'api_login', methods: ['POST'])]
-    public function login( UserRepository $userRepository, Request $request, UserPasswordEncoderInterface $encoder): JsonResponse
+    /**
+     * @Route("/login", name="app_login")
+     */
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        $user = $userRepository->findOneBy([
-            'email'=>$request->get('email'),
-        ]);
-        if (!$user || !$encoder->isPasswordValid($user, $request->get('password'))) {
-            return $this->json([
-                'message' => 'email or password is wrong.',
-            ]);
-        }
-        return $this->json([
-            'message' => 'success!',
-            'token' => 'Bearer %s',
-        ]);
+        // if ($this->getUser()) {
+        //     return $this->redirectToRoute('target_path');
+        // }
+
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
+
+
 
 
     /**

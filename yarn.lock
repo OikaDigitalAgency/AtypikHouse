@@ -952,7 +952,7 @@
 
 "@symfony/webpack-encore@^1.4.0":
   version "1.4.0"
-  resolved "https://registry.npmjs.org/@symfony/webpack-encore/-/webpack-encore-1.4.0.tgz"
+  resolved "https://registry.yarnpkg.com/@symfony/webpack-encore/-/webpack-encore-1.4.0.tgz#9b5e1628a99029166f7a41f7e9bf46208b1daca4"
   integrity sha512-6L39fpTtA+vRNQdTJzzVTzwHrant5idIzgWLh06IiH2RBXQ7QhFHbJLjRhygla0rmzuBfzKf19afTI3mniHRDA==
   dependencies:
     "@babel/core" "^7.7.0"
@@ -4906,7 +4906,7 @@ webpack-merge@^5.7.3:
 
 webpack-notifier@^1.13.0:
   version "1.13.0"
-  resolved "https://registry.npmjs.org/webpack-notifier/-/webpack-notifier-1.13.0.tgz"
+  resolved "https://registry.yarnpkg.com/webpack-notifier/-/webpack-notifier-1.13.0.tgz#24e43d00ee47032f047373ca291b2d1f543ec12d"
   integrity sha512-QLk6l/TZKGhyN6Hd1zobaiYno7S9YPX3wH86+YOSufHes77SegGhnGdj+4vrLDFK5A4ZKoQD5GRXXFnM0h0N8A==
   dependencies:
     node-notifier "^9.0.0"

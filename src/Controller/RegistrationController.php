@@ -9,8 +9,10 @@ use App\Security\EmailVerifier;
 use App\Security\AuthAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,14 +26,14 @@ class RegistrationController extends AbstractController
     private EmailVerifier $emailVerifier;
     private MailerInterface $mailer;
 
-    public function __construct(EmailVerifier $emailVerifier,  MailerInterface $mailer)
+    public function __construct(EmailVerifier $emailVerifier, MailerInterface $mailer)
     {
         $this->emailVerifier = $emailVerifier;
         $this->mailer = $mailer;
 
     }
 
-    #[Route('/register', name: 'app_register', methods: ["POST"])]
+    #[Route('/register', name: 'app_register')]
     public function register(Request $request,MailerInterface $mailer, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AuthAuthenticator $authenticator): Response
     {
         $user = new User();
@@ -54,15 +56,6 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from()
-                    ->to($form->get('email')->getData())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,

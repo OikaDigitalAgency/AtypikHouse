@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Controller\MeController;
 use App\Controller\ProfileController;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -284,12 +283,12 @@ class User implements UserInterface, EncoderAwareInterface
         return $this;
     }
 
-    public function getLastName(): ?string
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }
 
-    public function setLasName(string $lastname): self
+    public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
 

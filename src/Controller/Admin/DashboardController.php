@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Comments;
+use App\Entity\Equipement;
 use App\Entity\Houses;
 use App\Entity\Posts;
 use App\Entity\User;
@@ -51,6 +52,7 @@ class DashboardController extends AbstractDashboardController
            MenuItem::linkToCrud('Houses', 'fa fa-home', Houses::class),
 
            MenuItem::section('Equipements'),
+           MenuItem::linkToCrud('Equipements', 'fa fa-home', Equipement::class),
 
        ];
         // yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');

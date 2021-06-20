@@ -31,6 +31,7 @@ class ProfileController extends AbstractController
         return $user;
     }
 
+
     /**
      * Show the user.
      * @return Response

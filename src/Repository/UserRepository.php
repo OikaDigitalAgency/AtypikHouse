@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -17,7 +19,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+
+    public function __construct(ManagerRegistry $registry
+    )
     {
         parent::__construct($registry, User::class);
     }
@@ -34,6 +38,31 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newEncodedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+    public function addUser($email, $password, $lastName, $firstName, $address, $zipcode, $city, $phone)
+    {
+        $newUser = new User();
+
+        $newUser
+            ->setEmail($email)
+            ->setPassword($password)
+            ->setLastName($lastName)
+            ->setFirstName($firstName)
+            ->setAddress($address)
+            ->setZipCode($zipcode)
+            ->setCity($city)
+            ->setPhone($phone);
+
+        $this->manager->persist($newUser);
+        $this->manager->flush();
+    }
+
+    public function deleteRefreshToken(string $email)
+    {
+        $sql1 = "DELETE from refresh_tokens where username = :email;";
+        $co = $this->getEntityManager()->getConnection();
+        $statement = $co->prepare($sql1);
+        $statement->execute(array("email" => $email));
     }
 
     // /**
