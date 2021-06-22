@@ -18,12 +18,12 @@ class CategoriesRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Categories::class);
     }
-/*
+
     /**
      * Permet de récupérer les noms des types de logement
      * @return  array
      */
-    /*
+
       public function findAllTypes()
       {
           $result = array();
@@ -35,5 +35,5 @@ class CategoriesRepository extends ServiceEntityRepository
           $result = $query->execute();
           return $result;
       }
-      */
+
 }

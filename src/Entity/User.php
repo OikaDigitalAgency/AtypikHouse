@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\api\ApiController;
 use App\Controller\ProfileController;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,9 +28,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: [
     'profile' => [
         'pagination_enabled' => false,
-        'path' => '/profile',
+        'path' => '/{id}/profile',
         'method' => 'get',
-        'controller' => ProfileController::class,
+        'controller' => ApiController::class,
         'read' => false,
         'openapi_context' => [
             'security' => [['bearerAuth' => []]]
@@ -415,5 +416,16 @@ class User implements UserInterface, EncoderAwareInterface
             $this->email ,
             $this->password,
             ) = unserialize($serialized);
+    }
+    public function __draw(): array
+    {
+        return [
+            "email" => $this->email,
+            "firstname" => $this->firstname,
+            "lastname" => $this->lastname,
+            "address" => $this->address,
+            "zipcode" => $this->zipcode,
+            "roles" => $this->roles,
+        ];
     }
 }

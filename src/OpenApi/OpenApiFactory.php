@@ -46,7 +46,7 @@ class OpenApiFactory implements OpenApiFactoryInterface
         $pathItem = new PathItem(
             post: new Operation(
                 operationId: 'postApiLogin',
-                tags: ['Atuh'],
+                tags: ['Auth'],
                 responses: [
                     '200' => [
                         'description' => 'Utilisateur connecté',
@@ -70,7 +70,34 @@ class OpenApiFactory implements OpenApiFactoryInterface
                 )
             )
         );
-        $openApi->getPaths()->addPath('/api/login_check', $pathItem);
+        $profilePath = new PathItem(
+            get: new Operation(
+                operationId: 'getUserProfile',
+                responses: [
+                '200' => [
+                    'description' => 'Profile utilisateur',
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/User-read.User'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' =>  '#/components/schemas/Credentials'
+                            ]
+                        ]
+                    ])
+                )
+            )
+        );
+        $openApi->getPaths()->addPath('/api/login', $pathItem);
+        $openApi->getPaths()->addPath('/api/logged/profile', $profilePath );
         return $openApi;
     }
 }

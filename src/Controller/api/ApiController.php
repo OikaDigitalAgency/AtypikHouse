@@ -13,27 +13,31 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\User;
 use App\Entity\Houses;
 use App\Entity\Categories;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/api")
  */
 class ApiController extends AbstractController
 {
-    /**
-     * @Route("/logged/user/profile", name="api_logged_user_profile",
-     *      methods={"GET"})
-     * @param ApiService $apiService
-     * @return JsonResponse|AccessDeniedHttpException
-     */
-    public function profile(ApiService $apiService)
+    public function __construct(private \Symfony\Component\Security\Core\Security $security)
     {
-        $user = $this->getUser();
-        if (null == $user) {
-            throw new AccessDeniedHttpException("User not found");
-        }
-        return  new JsonResponse($apiService->getMakedConfiguration(
-            $user->__toArrayApi()
-        ), 200);
+    }
+    public function __invoke(User $user)
+    {
+        $user = $this->security->getUser();
+        return $user;
+    }
+
+    /**
+     * @Route("/{id}/profile", name="api_logged_user_profile",
+     *      methods={"GET"})
+     * @ParamConverter("user" , options={"mapping": {"id" : "id"}})
+     * @return JsonResponse
+     */
+    public function profile(User $user)
+    {
+        return new JsonResponse(["user" => $user->__draw()]);
     }
 
     /**
@@ -50,7 +54,6 @@ class ApiController extends AbstractController
         $response = $userService->logout($user);
         return new JsonResponse($response["data"], $response["httpCode"]);
     }
-
 
 
     /**
