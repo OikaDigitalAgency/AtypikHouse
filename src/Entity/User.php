@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -149,7 +150,7 @@ class User implements UserInterface, EncoderAwareInterface
     private string $city;
 
     /**
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=10)
      * @Assert\NotBlank
      * @Assert\Regex(
      *     pattern="/^[0-9]+$/i",
@@ -344,6 +345,8 @@ class User implements UserInterface, EncoderAwareInterface
         return $this;
     }
 
+
+
     /**
      * @see UserInterface
      */
@@ -417,6 +420,7 @@ class User implements UserInterface, EncoderAwareInterface
             $this->password,
             ) = unserialize($serialized);
     }
+
     public function __draw(): array
     {
         return [
