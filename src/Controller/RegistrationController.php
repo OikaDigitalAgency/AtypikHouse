@@ -30,44 +30,45 @@ class RegistrationController extends AbstractController
     {
         $this->emailVerifier = $emailVerifier;
         $this->mailer = $mailer;
-
     }
 
-    #[Route('/register', name: 'app_register')]
+    
+    #[Route('/register', name: 'app_register', methods:['POST'])]
     public function register(Request $request,MailerInterface $mailer, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AuthAuthenticator $authenticator): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+        $user = $this->get('serializer')->deserialize($request->getContent(), User::class, 'json');
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->addRole("ROLE_USER");
-            // encode the plain password
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-            $user->setIsActive(true);
-            $user->setCreationDate(new \DateTime());
-            $user->setLastLogin(new  \DateTime());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+        $user->addRole("ROLE_USER");
+        // encode the plain password
+        $parameters = json_decode($request->getContent(), true);
+        echo $parameters['plainPassword']; // will print 'plain password'
 
-
-            return $guardHandler->authenticateUserAndHandleSuccess(
+        $user->setPassword(
+            $passwordEncoder->encodePassword(
                 $user,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
-        }
+                $parameters['plainPassword']
+            )
+        );
+        $user->setIsActive(true);
+        $user->setCreationDate(new \DateTime());
+        $user->setLastLogin(new  \DateTime());
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        return new Response('User is created');
+
+
+        // return $guardHandler->authenticateUserAndHandleSuccess(
+        //     $user,
+        //     $request,
+        //     $authenticator,
+        //     'main' // firewall name in security.yaml
+        // );
+
+        // return $this->render('registration/register.html.twig', [
+        //     'registrationForm' => $form->createView(),
+        // ]);
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
