@@ -20,6 +20,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 class RegistrationController extends AbstractController
 {
@@ -34,7 +36,7 @@ class RegistrationController extends AbstractController
 
     
     #[Route('/register', name: 'app_register', methods:['POST'])]
-    public function register(Request $request,MailerInterface $mailer, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AuthAuthenticator $authenticator): Response
+    public function register(Request $request,MailerInterface $mailer, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AuthAuthenticator $authenticator, ValidatorInterface $validator): Response
     {
         $user = $this->get('serializer')->deserialize($request->getContent(), User::class, 'json');
 
@@ -49,6 +51,18 @@ class RegistrationController extends AbstractController
                 $parameters['plainPassword']
             )
         );
+
+        //validation des données user, permet de prendre en compte les assert
+        $errors = $validator->validate($user);
+
+        if (count($errors) > 0) {
+           
+            $errorsString = (string) $errors;
+    
+            return new Response($errorsString);
+        }
+    
+        //permet que les données soient dans la bdd
         $user->setIsActive(true);
         $user->setCreationDate(new \DateTime());
         $user->setLastLogin(new  \DateTime());
@@ -57,7 +71,6 @@ class RegistrationController extends AbstractController
         $entityManager->flush();
 
         return new Response('User is created');
-
 
         // return $guardHandler->authenticateUserAndHandleSuccess(
         //     $user,
@@ -69,6 +82,17 @@ class RegistrationController extends AbstractController
         // return $this->render('registration/register.html.twig', [
         //     'registrationForm' => $form->createView(),
         // ]);
+
+        $errors = $validator->validate($user);
+
+        if (count($errors) > 0) {
+           
+            $errorsString = (string) $errors;
+    
+            return new Response($errorsString);
+        }
+    
+        return new Response('The user is valid! Yes!');
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
@@ -90,4 +114,6 @@ class RegistrationController extends AbstractController
 
         return $this->redirectToRoute('app_register');
     }
+
+    
 }

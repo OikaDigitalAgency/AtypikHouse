@@ -81,6 +81,7 @@ class User implements UserInterface, EncoderAwareInterface
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     * @Assert\NotBlank()
      */
     private string $password;
 
@@ -139,6 +140,7 @@ class User implements UserInterface, EncoderAwareInterface
      * @var int
      *
      * @ORM\Column(name="zipcode", type="integer", nullable=false)
+     * @Assert\NotBlank()
      */
     private int $zipcode;
 
@@ -146,11 +148,12 @@ class User implements UserInterface, EncoderAwareInterface
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=false)
+     * @Assert\NotBlank()
      */
     private string $city;
 
     /**
-     * @ORM\Column(name="phone", type="string", length=10)
+     * @ORM\Column(name="phone", type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Regex(
      *     pattern="/^[0-9]+$/i",
@@ -159,7 +162,8 @@ class User implements UserInterface, EncoderAwareInterface
      * @Assert\Length(
      *      min = 10,
      *      max = 10,
-     *      maxMessage = "Le numéro de téléphone est incorrecte, exemple à saisir : 0102030405"
+     *      minMessage = "Votre numéro de téléphonne doit faire au moins {{ limit }} caractères",
+     *      maxMessage = "Votre numéro de téléphonne ne doit pas faire plus de {{ limit }} caractères"
      * )
      */
     private $phone;
