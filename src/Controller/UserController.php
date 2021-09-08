@@ -22,6 +22,7 @@ class UserController
                 'message' => 'email or password is wrong.',
             ]);
         }
+        echo "test";
         return $this->json([
             'message' => 'success!',
             'token' => 'Bearer %s',
