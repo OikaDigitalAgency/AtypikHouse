@@ -141,6 +141,12 @@ class User implements UserInterface, EncoderAwareInterface
      *
      * @ORM\Column(name="zipcode", type="integer", nullable=false)
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 5,
+     *      minMessage = "Votre code postal doit faire au moins {{ limit }} caractères",
+     *      maxMessage = "Votre code postal ne doit pas faire plus de {{ limit }} caractères"
+     * )
      */
     private int $zipcode;
 
@@ -149,6 +155,11 @@ class User implements UserInterface, EncoderAwareInterface
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=false)
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 255,
+     *      minMessage = "Votre ville doit faire au moins {{ limit }} caractères",
+     *      maxMessage = "Votre ville ne doit pas faire plus de {{ limit }} caractères"
      */
     private string $city;
 
