@@ -155,11 +155,7 @@ class User implements UserInterface, EncoderAwareInterface
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=false)
      * @Assert\NotBlank()
-     * @Assert\Length(
-     *      min = 5,
-     *      max = 255,
-     *      minMessage = "Votre ville doit faire au moins {{ limit }} caractères",
-     *      maxMessage = "Votre ville ne doit pas faire plus de {{ limit }} caractères"
+     * 
      */
     private string $city;
 
