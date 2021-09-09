@@ -40,10 +40,8 @@ class RegistrationController extends AbstractController
     {
         $user = $this->get('serializer')->deserialize($request->getContent(), User::class, 'json');
 
-        $user->addRole("ROLE_USER");
         // encode the plain password
         $parameters = json_decode($request->getContent(), true);
-        echo $parameters['plainPassword']; // will print 'plain password'
 
         $user->setPassword(
             $passwordEncoder->encodePassword(
@@ -61,7 +59,8 @@ class RegistrationController extends AbstractController
     
             return new Response($errorsString);
         }
-    
+
+        $user->addRole("ROLE_USER");
         //permet que les données soient dans la bdd
         $user->setIsActive(true);
         $user->setCreationDate(new \DateTime());
@@ -70,28 +69,6 @@ class RegistrationController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return new Response('User is created');
-
-        // return $guardHandler->authenticateUserAndHandleSuccess(
-        //     $user,
-        //     $request,
-        //     $authenticator,
-        //     'main' // firewall name in security.yaml
-        // );
-
-        // return $this->render('registration/register.html.twig', [
-        //     'registrationForm' => $form->createView(),
-        // ]);
-
-        $errors = $validator->validate($user);
-
-        if (count($errors) > 0) {
-           
-            $errorsString = (string) $errors;
-    
-            return new Response($errorsString);
-        }
-    
         return new Response('The user is valid! Yes!');
     }
 
