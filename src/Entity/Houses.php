@@ -11,9 +11,44 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="houses", indexes={@ORM\Index(name="house_id_category", columns={"ID_category"}), @ORM\Index(name="house_id_user", columns={"ID_user"})})
  * @ORM\Entity
  */
-#[ApiResource]
+
+/*Permet de creer des operations personnalisé (requete)*/
+#[ApiResource(
+
+    itemOperations: [
+    'put',
+    'delete',
+    'patch',
+    'get' => [
+
+        'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Post']]
+    ],
+        /*New Items*/
+        'search'=>[
+            'method' => 'POST',
+            'path' => '/houses/search',
+            'controller' => HousesPublishController::class,
+            /*'openapi_context' =>[
+                'summary'=> 'permet de faire search',
+                'requestBody'=>[
+                    'content'=>[
+                        'application/json' => [
+                            'schema' =>[]
+                        ]
+                    ]
+                ]
+            ]*/
+
+        ]
+]
+
+),
+]
+
 class Houses
 {
+    #[Groups(['search'])]
+
     /**
      * @var int
      *
@@ -126,6 +161,14 @@ class Houses
      * })
      */
     private $idUser;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default": "0"})
+     */
+    #[Groups(['read:collection'])]
+    private $online = false;
+
+
 
     public function getId(): ?int
     {
@@ -299,6 +342,20 @@ class Houses
 
         return $this;
     }
+
+    public function getOnline(): ?bool
+    {
+        return $this->online;
+    }
+
+    public function setOnline(bool $online): self
+    {
+        $this->online = $online;
+
+        return $this;
+    }
+
+
 
 
 }
