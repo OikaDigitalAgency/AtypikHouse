@@ -17,6 +17,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ORM\Table(name="houses", indexes={@ORM\Index(name="house_id_category", columns={"ID_category"}), @ORM\Index(name="house_id_user", columns={"ID_user"})})
  * @ORM\Entity
  * @ApiFilter(SearchFilter::class, properties={"city":"exact"}))
+ * * @ApiFilter(DateFilter::class, properties={"dateDebut"}))
  * @ApiFilter(DateFilter::class, properties={"dateFin"}))
  * @ApiFilter(NumericFilter::class, properties={"nbbeds"}))
  */
