@@ -19,10 +19,12 @@ use Doctrine\ORM\Mapping as ORM;
     'put',
     'delete',
     'patch',
+    'get'=> [
+            'path' => '/houses/{id}',
+            'requirements' => ['id' => '\d+']],
     'get' => [
-
-        'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Post']]
-    ],
+        'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Post', 'read:Post']]],
+       
         /*New Items*/
         'search'=>[
             'method' => 'POST',
