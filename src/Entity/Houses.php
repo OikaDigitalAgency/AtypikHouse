@@ -4,34 +4,27 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
-#[ApiResource(
 
-    itemOperations:[
-        'put',
-        'delete',
-        'patch',
-        'get' => ['normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Post']]],
-        'get' => ['path' => '/houses/{id}', 'requirements' => ['id' => '\d+']],
-    ],
 
-),
-]
 /**
  * Houses
  *
  * @ORM\Table(name="houses", indexes={@ORM\Index(name="house_id_category", columns={"ID_category"}), @ORM\Index(name="house_id_user", columns={"ID_user"})})
  * @ORM\Entity
- * @ApiFilter(SearchFilter::class, properties={"city"}))
+ * @ApiFilter(SearchFilter::class, properties={"city":"exact"}))
  * @ApiFilter(DateFilter::class, properties={"dateFin"}))
- * @ApiFilter(RangeFilter::class, properties={"nbbeds"}))
+ * @ApiFilter(NumericFilter::class, properties={"nbbeds"}))
  */
+
+#[ApiResource]
     class Houses
 {
-        #[Groups(['search'])]
+
 
 /**
  * @var int
