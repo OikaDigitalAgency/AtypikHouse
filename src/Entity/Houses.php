@@ -55,7 +55,9 @@ class Houses
      * @ORM\Column(name="ID", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
      */
+
     private $id;
 
     /**
@@ -161,13 +163,6 @@ class Houses
      * })
      */
     private $idUser;
-
-    /**
-     * @ORM\Column(type="boolean", options={"default": "0"})
-     */
-    #[Groups(['read:collection'])]
-    private $online = false;
-
 
 
     public function getId(): ?int
@@ -343,17 +338,7 @@ class Houses
         return $this;
     }
 
-    public function getOnline(): ?bool
-    {
-        return $this->online;
-    }
 
-    public function setOnline(bool $online): self
-    {
-        $this->online = $online;
-
-        return $this;
-    }
 
 
 
