@@ -11,16 +11,53 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="houses", indexes={@ORM\Index(name="house_id_category", columns={"ID_category"}), @ORM\Index(name="house_id_user", columns={"ID_user"})})
  * @ORM\Entity
  */
-#[ApiResource]
+
+/*Permet de creer des operations personnalisé (requete)*/
+#[ApiResource(
+
+    itemOperations: [
+    'put',
+    'delete',
+    'patch',
+    'get' => [
+
+        'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Post']]
+    ],
+        /*New Items*/
+        'search'=>[
+            'method' => 'POST',
+            'path' => '/houses/search',
+            'controller' => HousesPublishController::class,
+            /*'openapi_context' =>[
+                'summary'=> 'permet de faire search',
+                'requestBody'=>[
+                    'content'=>[
+                        'application/json' => [
+                            'schema' =>[]
+                        ]
+                    ]
+                ]
+            ]*/
+
+        ]
+]
+
+),
+]
+
 class Houses
 {
+    #[Groups(['search'])]
+
     /**
      * @var int
      *
      * @ORM\Column(name="ID", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
      */
+
     private $id;
 
     /**
@@ -126,6 +163,7 @@ class Houses
      * })
      */
     private $idUser;
+
 
     public function getId(): ?int
     {
@@ -299,6 +337,10 @@ class Houses
 
         return $this;
     }
+
+
+
+
 
 
 }
