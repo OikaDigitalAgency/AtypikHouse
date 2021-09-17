@@ -69,7 +69,9 @@ security:
         - { path: ^/se_admin/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/se_admin/auth/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # Plus on a une requête précise, plus elle est "haute" dans l'ordre de protection d'accès
+        - { path: ^/api/houses, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET] }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/, roles: ROLE_USER }
-        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
