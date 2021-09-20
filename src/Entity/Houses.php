@@ -8,8 +8,6 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -103,27 +101,18 @@ class Houses
     private $tax;
 
 /**
- * @var string
+ * @var array
  *
- * @ORM\Column(name="listID_activities", type="string", length=255, nullable=false)
+ * @ORM\Column(name="listID_activities", type="array", nullable=false)
  */
     private $listidActivities;
 
 /**
- * @var string
+ * @var array
  *
- * @ORM\Column(name="listID_tags", type="string", length=255, nullable=false)
+ * @ORM\Column(name="listID_tags", type="array", nullable=false)
  */
     private $listidTags;
-
-/**
- * @var string
- *
- * @ORM\Column(name="listID_pics", type="string", length=255, nullable=false)
- */
-    private $listidPics;
-
-
 
 /**
  * @var \User
@@ -145,14 +134,15 @@ class Houses
  */
     private $dateFin;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $categories;
+/**
+ * @ORM\Column(type="array", nullable=true)
+ */
+    private $listIdEquipements = [];
 
-
-
-
+/**
+ * @ORM\Column(type="string", length=255)
+ */
+    private $categorie;
 
     public function getId(): ?int
     {
@@ -267,42 +257,41 @@ class Houses
         return $this;
     }
 
-    public function getListidActivities(): ?string
+    public function getListidActivities(): ?array
     {
         return $this->listidActivities;
     }
 
-    public function setListidActivities(string $listidActivities): self
+    public function setListidActivities(array $listidActivities): self
     {
         $this->listidActivities = $listidActivities;
 
         return $this;
     }
 
-    public function getListidTags(): ?string
+    public function getListidTags(): ?array
     {
         return $this->listidTags;
     }
 
-    public function setListidTags(string $listidTags): self
+    public function setListidTags(array $listidTags): self
     {
         $this->listidTags = $listidTags;
 
         return $this;
     }
 
-    public function getListidPics(): ?string
+    public function getListidPics(): ?array
     {
         return $this->listidPics;
     }
 
-    public function setListidPics(string $listidPics): self
+    public function setListidPics(array $listidPics): self
     {
         $this->listidPics = $listidPics;
 
         return $this;
     }
-
 
     public function getIdUser(): ?User
     {
@@ -340,16 +329,27 @@ class Houses
         return $this;
     }
 
-    public function getCategories(): ?string
+    public function getListIdEquipements(): ?array
     {
-        return $this->categories;
+        return $this->listIdEquipements;
     }
 
-    public function setCategories(string $categories): self
+    public function setListIdEquipements(?array $listIdEquipements): self
     {
-        $this->categories = $categories;
+        $this->listIdEquipements = $listIdEquipements;
 
         return $this;
     }
 
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(string $categorie): self
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
 }
