@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Comments
  *
- * @ORM\Table(name="comments", indexes={@ORM\Index(name="comment_id_booking", columns={"ID_booking"}), @ORM\Index(name="comment_id_user", columns={"ID_user"})})
+ * @ORM\Table(name="comments", indexes={@ORM\Index(name="comment_id_user", columns={"ID_user"})})
  * @ORM\Entity
  */
 #[ApiResource]
@@ -44,15 +44,7 @@ class Comments
      */
     private $date;
 
-    /**
-     * @var \Booking
-     *
-     * @ORM\ManyToOne(targetEntity="Booking")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_booking", referencedColumnName="ID")
-     * })
-     */
-    private $idBooking;
+
 
     /**
      * @var \User
@@ -63,6 +55,11 @@ class Comments
      * })
      */
     private $idUser;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Houses::class, inversedBy="comments")
+     */
+    private $idHouses;
 
     public function getId(): ?int
     {
@@ -105,18 +102,6 @@ class Comments
         return $this;
     }
 
-    public function getIdBooking(): ?Booking
-    {
-        return $this->idBooking;
-    }
-
-    public function setIdBooking(?Booking $idBooking): self
-    {
-        $this->idBooking = $idBooking;
-
-        return $this;
-    }
-
     public function getIdUser(): ?User
     {
         return $this->idUser;
@@ -125,6 +110,18 @@ class Comments
     public function setIdUser(?User $idUser): self
     {
         $this->idUser = $idUser;
+
+        return $this;
+    }
+
+    public function getIdHouses(): ?Houses
+    {
+        return $this->idHouses;
+    }
+
+    public function setIdHouses(?Houses $idHouses): self
+    {
+        $this->idHouses = $idHouses;
 
         return $this;
     }
