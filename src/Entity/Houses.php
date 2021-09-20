@@ -352,6 +352,4 @@ class Houses
         return $this;
     }
 
-
-
 }

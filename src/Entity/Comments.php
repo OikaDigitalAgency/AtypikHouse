@@ -57,7 +57,7 @@ class Comments
     private $idUser;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Houses::class, inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity=Houses::class)
      */
     private $idHouses;
 
@@ -125,6 +125,8 @@ class Comments
 
         return $this;
     }
+
+
 
 
 }
