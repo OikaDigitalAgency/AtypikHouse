@@ -8,7 +8,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\HousesImageController;
 use Doctrine\ORM\Mapping as ORM;
+
 
 /**
  * Houses
@@ -22,7 +24,24 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiFilter(BooleanFilter::class, properties={"status"}))
  */
 
-#[ApiResource]
+#[ApiResource(
+    itemOperations: [
+        'put',
+        'delete',
+        'get' =>[
+           'normalization_context' =>['groups' =>['read:collection', 'read:item', 'read:Post']]
+        ],
+        /*requete image*/
+        'image' =>[
+            'method' => 'POST',
+            'path' => '/houses/{id}/image',
+            'desieralize' => false,
+            'controller' => HousesImageController::class
+        ]
+    ]
+),
+
+]
 class Houses
 {
 
@@ -36,6 +55,7 @@ class Houses
  */
 
     private $id;
+    #[Groups(['read:collection'])]
 
 /**
  * @var string
@@ -138,6 +158,11 @@ class Houses
  * @ORM\Column(type="array", nullable=true)
  */
     private $listIdEquipements = [];
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $listidPics = [];
 
 /**
  * @ORM\Column(type="string", length=255)
