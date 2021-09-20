@@ -8,12 +8,14 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Houses
  *
- * @ORM\Table(name="houses", indexes={@ORM\Index(name="house_id_category", columns={"ID_category"}), @ORM\Index(name="house_id_user", columns={"ID_user"})})
+ * @ORM\Table(name="houses", indexes={@ORM\Index(name="house_id_user", columns={"ID_user"})})
  * @ORM\Entity
  * @ApiFilter(SearchFilter::class, properties={"city":"exact"}))
  * @ApiFilter(DateFilter::class, properties={"dateDebut"}))
@@ -121,15 +123,7 @@ class Houses
  */
     private $listidPics;
 
-/**
- * @var \Categories
- *
- * @ORM\ManyToOne(targetEntity="Categories")
- * @ORM\JoinColumns({
- *   @ORM\JoinColumn(name="ID_category", referencedColumnName="ID")
- * })
- */
-    private $idCategory;
+
 
 /**
  * @var \User
@@ -150,6 +144,15 @@ class Houses
  * @ORM\Column(type="datetime", nullable=true)
  */
     private $dateFin;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $categories;
+
+
+
+
 
     public function getId(): ?int
     {
@@ -300,17 +303,6 @@ class Houses
         return $this;
     }
 
-    public function getIdCategory(): ?Categories
-    {
-        return $this->idCategory;
-    }
-
-    public function setIdCategory(?Categories $idCategory): self
-    {
-        $this->idCategory = $idCategory;
-
-        return $this;
-    }
 
     public function getIdUser(): ?User
     {
@@ -347,5 +339,19 @@ class Houses
 
         return $this;
     }
+
+    public function getCategories(): ?string
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(string $categories): self
+    {
+        $this->categories = $categories;
+
+        return $this;
+    }
+
+
 
 }
