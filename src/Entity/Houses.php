@@ -40,7 +40,24 @@ use Symfony\Component\HttpFoundation\File\File;
             'method' => 'POST',
             'path' => '/houses/{id}/image',
             'deserialize' => false,
-            'controller' => HousesImageController::class
+            'controller' => HousesImageController::class,
+            'openapi_context' => [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         ]
     ]
 ),
@@ -143,7 +160,7 @@ class Houses
  *
  * @ORM\ManyToOne(targetEntity="User")
  * @ORM\JoinColumns({
- *   @ORM\JoinColumn(name="ID_user", referencedColumnName="ID")
+ * @ORM\JoinColumn(name="ID_user", referencedColumnName="ID")
  * })
  */
     private $idUser;
@@ -170,16 +187,13 @@ class Houses
  */
     private $categorie;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $pictures = [];
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     #[Groups(['read:collection'])]
     private $filePath;
+
 
     public function __construct(){
         $this->createdAt = new \DateTime();
@@ -191,6 +205,16 @@ class Houses
      * @Vich\UploadableField(mapping="house_image", fileNameProperty="filePath")
      */
     private $file;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
 
     public function getId(): ?int
@@ -392,17 +416,6 @@ class Houses
         return $this;
     }
 
-    public function getPictures(): ?array
-    {
-        return $this->pictures;
-    }
-
-    public function setPictures(?array $pictures): self
-    {
-        $this->pictures = $pictures;
-
-        return $this;
-    }
 
     public function getFilePath(): ?string
     {
@@ -434,40 +447,30 @@ class Houses
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $createdAt
-     * @return Houses
-     */
-    public function setCreatedAt(\DateTime $createdAt): Houses
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @param \DateTime $updatedAt
-     * @return Houses
-     */
-    public function setUpdatedAt(\DateTime $updatedAt): Houses
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
+
+
 
 }
