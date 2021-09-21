@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Houses;
-use http\Env\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 class HousesImageController{
 
@@ -14,8 +14,8 @@ class HousesImageController{
                 throw new \RuntimeException('erreur');
             }
 
-        $file = $request->listidPics->get('listidPics');
-        dd($file, $houses);
+        $picture = $request->files->get('picture');
+        dd($picture, $houses);
     }
 
 }

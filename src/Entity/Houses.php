@@ -10,6 +10,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\HousesImageController;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 
 /**
@@ -35,7 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
         'image' =>[
             'method' => 'POST',
             'path' => '/houses/{id}/image',
-            'desieralize' => false,
+            'deserialize' => false,
             'controller' => HousesImageController::class
         ]
     ]
@@ -159,15 +161,23 @@ class Houses
  */
     private $listIdEquipements = [];
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $listidPics = [];
+
 
 /**
  * @ORM\Column(type="string", length=255)
  */
     private $categorie;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $pictures = [];
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $filePath;
+
 
     public function getId(): ?int
     {
@@ -306,17 +316,7 @@ class Houses
         return $this;
     }
 
-    public function getListidPics(): ?array
-    {
-        return $this->listidPics;
-    }
 
-    public function setListidPics(array $listidPics): self
-    {
-        $this->listidPics = $listidPics;
-
-        return $this;
-    }
 
     public function getIdUser(): ?User
     {
@@ -377,4 +377,31 @@ class Houses
 
         return $this;
     }
+
+    public function getPictures(): ?array
+    {
+        return $this->pictures;
+    }
+
+    public function setPictures(?array $pictures): self
+    {
+        $this->pictures = $pictures;
+
+        return $this;
+    }
+
+    public function getFilePath(): ?string
+    {
+        return $this->filePath;
+    }
+
+    public function setFilePath(?string $filePath): self
+    {
+        $this->filePath = $filePath;
+
+        return $this;
+    }
+
+
+
 }
