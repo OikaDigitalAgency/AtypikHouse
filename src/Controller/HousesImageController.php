@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Houses;
 use Symfony\Component\HttpFoundation\Request;
 
+/*controller qui permet de faire fonctionner la requête de l'image*/
 class HousesImageController{
 
     public function __invoke(Request $request){

@@ -74,7 +74,7 @@ class Houses
  * @ORM\GeneratedValue(strategy="IDENTITY")
  *
  */
-
+    #[Groups(['read:collection'])]
     private $id;
 
 
@@ -191,10 +191,15 @@ class Houses
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    #[Groups(['read:collection'])]
     private $filePath;
 
+    /**
+     * @var string|null
+     */
+    #[Groups(['read:collection'])]
+    private $fileUrl;
 
+/*fonction qui permet de changer la date de l'image*/
     public function __construct(){
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
@@ -209,11 +214,15 @@ class Houses
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
+
+    /*date image*/
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
+
+    /*date image*/
     private $updatedAt;
 
 
@@ -470,6 +479,26 @@ class Houses
 
         return $this;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getFileUrl(): ?string
+    {
+        return $this->fileUrl;
+    }
+
+    /**
+     * @param string|null $fileUrl
+     * @return Houses
+     */
+    public function setFileUrl(?string $fileUrl): Houses
+    {
+        $this->fileUrl = $fileUrl;
+        return $this;
+    }
+
+
 
 
 
