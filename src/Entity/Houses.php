@@ -188,7 +188,7 @@ class Houses
 
     /**
      * @var File|null
-     * @Vich\UploadableField(mapping="post_image", fileNameProperty="filePath")
+     * @Vich\UploadableField(mapping="house_image", fileNameProperty="filePath")
      */
     private $file;
 
