@@ -8,7 +8,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\HousesImageController;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+
+
 
 /**
  * Houses
@@ -20,9 +25,44 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiFilter(DateFilter::class, properties={"dateFin"}))
  * @ApiFilter(RangeFilter::class, properties={"nbbeds"}))
  * @ApiFilter(BooleanFilter::class, properties={"status"}))
+ * @Vich\Uploadable()
  */
 
-#[ApiResource]
+#[ApiResource(
+    itemOperations: [
+        'put',
+        'delete',
+        'get' =>[
+           'normalization_context' =>['groups' =>['read:collection', 'read:item', 'read:Post']]
+        ],
+        /*requete image*/
+        'image' =>[
+            'method' => 'POST',
+            'path' => '/houses/{id}/image',
+            'deserialize' => false,
+            'controller' => HousesImageController::class,
+            'openapi_context' => [
+                'requestBody' => [
+                    'content' => [
+                        'multipart/form-data' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'file' => [
+                                        'type' => 'string',
+                                        'format' => 'binary'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ]
+),
+
+]
 class Houses
 {
 
@@ -34,8 +74,9 @@ class Houses
  * @ORM\GeneratedValue(strategy="IDENTITY")
  *
  */
-
+    #[Groups(['read:collection'])]
     private $id;
+
 
 /**
  * @var string
@@ -119,7 +160,7 @@ class Houses
  *
  * @ORM\ManyToOne(targetEntity="User")
  * @ORM\JoinColumns({
- *   @ORM\JoinColumn(name="ID_user", referencedColumnName="ID")
+ * @ORM\JoinColumn(name="ID_user", referencedColumnName="ID")
  * })
  */
     private $idUser;
@@ -139,10 +180,51 @@ class Houses
  */
     private $listIdEquipements = [];
 
+
+
 /**
  * @ORM\Column(type="string", length=255)
  */
     private $categorie;
+
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $filePath;
+
+    /**
+     * @var string|null
+     */
+    #[Groups(['read:collection'])]
+    private $fileUrl;
+
+/*fonction qui permet de changer la date de l'image*/
+    public function __construct(){
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="house_image", fileNameProperty="filePath")
+     */
+    private $file;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+
+    /*date image*/
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+
+    /*date image*/
+    private $updatedAt;
+
 
     public function getId(): ?int
     {
@@ -281,17 +363,7 @@ class Houses
         return $this;
     }
 
-    public function getListidPics(): ?array
-    {
-        return $this->listidPics;
-    }
 
-    public function setListidPics(array $listidPics): self
-    {
-        $this->listidPics = $listidPics;
-
-        return $this;
-    }
 
     public function getIdUser(): ?User
     {
@@ -352,4 +424,82 @@ class Houses
 
         return $this;
     }
+
+
+    public function getFilePath(): ?string
+    {
+        return $this->filePath;
+    }
+
+    public function setFilePath(?string $filePath): self
+    {
+        $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param File|null $file
+     * @return Houses
+     */
+    public function setFile(?File $file): Houses
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFileUrl(): ?string
+    {
+        return $this->fileUrl;
+    }
+
+    /**
+     * @param string|null $fileUrl
+     * @return Houses
+     */
+    public function setFileUrl(?string $fileUrl): Houses
+    {
+        $this->fileUrl = $fileUrl;
+        return $this;
+    }
+
+
+
+
+
 }
