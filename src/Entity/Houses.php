@@ -10,7 +10,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\HousesImageController;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 
 
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(DateFilter::class, properties={"dateFin"}))
  * @ApiFilter(RangeFilter::class, properties={"nbbeds"}))
  * @ApiFilter(BooleanFilter::class, properties={"status"}))
+ * @Vich\Uploadable()
  */
 
 #[ApiResource(
@@ -57,7 +59,7 @@ class Houses
  */
 
     private $id;
-    #[Groups(['read:collection'])]
+
 
 /**
  * @var string
@@ -176,7 +178,19 @@ class Houses
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups(['read:collection'])]
     private $filePath;
+
+    public function __construct(){
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="post_image", fileNameProperty="filePath")
+     */
+    private $file;
 
 
     public function getId(): ?int
@@ -402,6 +416,58 @@ class Houses
         return $this;
     }
 
+    /**
+     * @return File|null
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
 
+    /**
+     * @param File|null $file
+     * @return Houses
+     */
+    public function setFile(?File $file): Houses
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     * @return Houses
+     */
+    public function setCreatedAt(\DateTime $createdAt): Houses
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     * @return Houses
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): Houses
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
 
 }

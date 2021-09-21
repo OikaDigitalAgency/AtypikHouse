@@ -14,8 +14,9 @@ class HousesImageController{
                 throw new \RuntimeException('erreur');
             }
 
-        $picture = $request->files->get('picture');
-        dd($picture, $houses);
+        $houses->setFile( $request->files->get('file'));
+        $houses->setUpdatedAt(new \DateTime());
+        return $houses;
     }
 
 }
