@@ -12,6 +12,8 @@ use App\Controller\HousesImageController;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 
 
@@ -32,14 +34,16 @@ use Symfony\Component\HttpFoundation\File\File;
     itemOperations: [
         'put',
         'delete',
+        'patch',
         'get' =>[
-           'normalization_context' =>['groups' =>['read:collection', 'read:item', 'read:Post']]
+           'normalization_context' =>['groups' =>['read:collection', 'read:item', 'read:Post']],
+            'openapi_definition_name' => 'Detail'
         ],
+
         /*requete image*/
         'image' =>[
             'method' => 'POST',
             'path' => '/houses/{id}/image',
-            'deserialize' => false,
             'controller' => HousesImageController::class,
             'openapi_context' => [
                 'requestBody' => [
@@ -59,7 +63,14 @@ use Symfony\Component\HttpFoundation\File\File;
                 ]
             ]
         ]
-    ]
+    ],
+    denormalizationContext: ['groups' => ['write:Post']],
+    normalizationContext: [
+    'groups' => ['read:collection'],
+    'openapi_definition_name' => 'Collection'
+],
+
+
 ),
 
 ]
@@ -83,6 +94,8 @@ class Houses
  *
  * @ORM\Column(name="title", type="string", length=50, nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $title;
 
 /**
@@ -90,6 +103,8 @@ class Houses
  *
  * @ORM\Column(name="description", type="text", length=65535, nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $description;
 
 /**
@@ -97,6 +112,8 @@ class Houses
  *
  * @ORM\Column(name="address", type="string", length=255, nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $address;
 
 /**
@@ -104,6 +121,8 @@ class Houses
  *
  * @ORM\Column(name="zipcode", type="integer", nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $zipcode;
 
 /**
@@ -111,6 +130,8 @@ class Houses
  *
  * @ORM\Column(name="city", type="string", length=255, nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $city;
 
 /**
@@ -118,6 +139,8 @@ class Houses
  *
  * @ORM\Column(name="status", type="boolean", nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $status;
 
 /**
@@ -125,6 +148,8 @@ class Houses
  *
  * @ORM\Column(name="nbBeds", type="integer", nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $nbbeds;
 
 /**
@@ -132,6 +157,8 @@ class Houses
  *
  * @ORM\Column(name="price", type="integer", nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $price;
 
 /**
@@ -139,6 +166,8 @@ class Houses
  *
  * @ORM\Column(name="tax", type="integer", nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $tax;
 
 /**
@@ -146,6 +175,8 @@ class Houses
  *
  * @ORM\Column(name="listID_activities", type="array", nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $listidActivities;
 
 /**
@@ -153,6 +184,8 @@ class Houses
  *
  * @ORM\Column(name="listID_tags", type="array", nullable=false)
  */
+    #[Groups(['read:collection', 'write:Post'])]
+
     private $listidTags;
 
 /**
@@ -163,21 +196,26 @@ class Houses
  * @ORM\JoinColumn(name="ID_user", referencedColumnName="ID")
  * })
  */
+
+    #[Groups(['read:collection'])]
     private $idUser;
 
 /**
  * @ORM\Column(type="datetime", nullable=true)
  */
+    #[Groups(['read:collection'])]
     private $dateDebut;
 
 /**
  * @ORM\Column(type="datetime", nullable=true)
  */
+    #[Groups(['read:collection'])]
     private $dateFin;
 
 /**
  * @ORM\Column(type="array", nullable=true)
  */
+    #[Groups(['read:collection', 'write:Post'])]
     private $listIdEquipements = [];
 
 
@@ -185,6 +223,7 @@ class Houses
 /**
  * @ORM\Column(type="string", length=255)
  */
+    #[Groups(['read:collection', 'write:Post'])]
     private $categorie;
 
 
@@ -209,6 +248,8 @@ class Houses
      * @var File|null
      * @Vich\UploadableField(mapping="house_image", fileNameProperty="filePath")
      */
+
+    #[Groups(['write:Post'])]
     private $file;
 
     /**
@@ -216,6 +257,7 @@ class Houses
      */
 
     /*date image*/
+    #[Groups(['read:collection'])]
     private $createdAt;
 
     /**
@@ -223,6 +265,7 @@ class Houses
      */
 
     /*date image*/
+    #[Groups(['read:collection'])]
     private $updatedAt;
 
 
@@ -455,6 +498,7 @@ class Houses
         $this->file = $file;
         return $this;
     }
+    
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
