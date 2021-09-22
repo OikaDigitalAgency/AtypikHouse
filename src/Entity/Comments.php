@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Comments
  *
- * @ORM\Table(name="comments", indexes={@ORM\Index(name="comment_id_user", columns={"ID_user"})})
+ * @ORM\Table(name="comments", indexes={@ORM\Index(name="comment_id_user", columns={"ID_user"}), @ORM\Index(name="comment_id_house", columns={"ID_house"})})
  * @ORM\Entity
  */
 #[ApiResource]
@@ -57,7 +57,12 @@ class Comments
     private $idUser;
 
     /**
+     * @var \Houses
+     *
      * @ORM\ManyToOne(targetEntity=Houses::class)
+     *  * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ID_house", referencedColumnName="ID")
+     * })
      */
     private $idHouses;
 
