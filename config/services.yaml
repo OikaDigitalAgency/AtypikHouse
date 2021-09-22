@@ -38,3 +38,9 @@ services:
         arguments:
             $refreshTokenManager: '@gesdinet.jwtrefreshtoken.refresh_token_manager'
             $ttl: '%env(int:JWT_TOKEN_TTL)%'
+
+    App\EventListener\DeserializeListener:
+            tags:
+                - { name: 'kernel.event_listener', event: 'kernel.request', method: 'onKernelRequest', priority: 2 }
+            decorates: 'api_platform.listener.request.deserialize'
+            autoconfigure: false
