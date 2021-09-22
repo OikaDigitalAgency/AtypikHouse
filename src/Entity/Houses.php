@@ -499,7 +499,6 @@ class Houses
         return $this;
     }
     
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
