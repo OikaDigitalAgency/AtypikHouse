@@ -4,23 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Posts;
 use App\Entity\User;
-use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use App\Security\AuthAuthenticator;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 
 class RegistrationController extends AbstractController
@@ -36,9 +32,11 @@ class RegistrationController extends AbstractController
 
     
     #[Route('/register', name: 'app_register', methods:['POST'])]
-    public function register(Request $request,MailerInterface $mailer, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AuthAuthenticator $authenticator, ValidatorInterface $validator): Response
+    public function register(Request $request,MailerInterface $mailer, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AuthAuthenticator $authenticator, ValidatorInterface $validator): JsonResponse
     {
+
         $user = $this->get('serializer')->deserialize($request->getContent(), User::class, 'json');
+
 
         // encode the plain password
         $parameters = json_decode($request->getContent(), true);
@@ -57,10 +55,11 @@ class RegistrationController extends AbstractController
            
             $errorsString = (string) $errors;
     
-            return new Response($errorsString);
+            return new JsonResponse($errorsString);
         }
 
         $user->addRole("ROLE_USER");
+
         //permet que les données soient dans la bdd
         $user->setIsActive(true);
         $user->setCreationDate(new \DateTime());
@@ -69,8 +68,12 @@ class RegistrationController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return new Response('The user is valid! Yes!');
+        return new JsonResponse('The user is valid! Yes!');
+
+
     }
+
+
 
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request): Response
@@ -91,6 +94,8 @@ class RegistrationController extends AbstractController
 
         return $this->redirectToRoute('app_register');
     }
+
+
 
     
 }
