@@ -10,12 +10,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\HousesImageController;
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
-
-
-
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Houses
@@ -23,25 +20,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="houses", indexes={@ORM\Index(name="house_id_user", columns={"ID_user"})})
  * @ORM\Entity
  * @ApiFilter(SearchFilter::class, properties={"city":"exact"}))
- * @ApiFilter(DateFilter::class, properties={"dateDebut"}))
- * @ApiFilter(DateFilter::class, properties={"dateFin"}))
+ * @ApiFilter(DateFilter::class, properties={"dateDebut: DateFilter::INCLUDE_NULL_BEFORE_AND_AFTER"}))
+ * @ApiFilter(DateFilter::class, properties={"dateFin: DateFilter::INCLUDE_NULL_BEFORE_AND_AFTER"}))
  * @ApiFilter(RangeFilter::class, properties={"nbbeds"}))
  * @ApiFilter(BooleanFilter::class, properties={"status"}))
  * @Vich\Uploadable()
  */
 
 #[ApiResource(
-    itemOperations: [
+    itemOperations:[
         'put',
         'delete',
         'patch',
-        'get' =>[
-           'normalization_context' =>['groups' =>['read:collection', 'read:item', 'read:Post']],
-            'openapi_definition_name' => 'Detail'
+        'get' => [
+            'normalization_context' => ['groups' => ['read:collection', 'read:item', 'read:Post']],
+            'openapi_definition_name' => 'Detail',
         ],
 
         /*requete image*/
-        'image' =>[
+        'image' => [
             'method' => 'POST',
             'path' => '/houses/{id}/image',
             'controller' => HousesImageController::class,
@@ -54,27 +51,26 @@ use Symfony\Component\Serializer\Annotation\Groups;
                                 'properties' => [
                                     'file' => [
                                         'type' => 'string',
-                                        'format' => 'binary'
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ]
+                                        'format' => 'binary',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
     ],
-    denormalizationContext: ['groups' => ['write:Post']],
-    normalizationContext: [
-    'groups' => ['read:collection'],
-    'openapi_definition_name' => 'Collection'
-],
-
+    denormalizationContext:['groups' => ['write:Post']],
+    normalizationContext:[
+        'groups' => ['read:collection'],
+        'openapi_definition_name' => 'Collection',
+    ],
 
 ),
 
 ]
-class Houses
+    class Houses
 {
 
 /**
@@ -85,9 +81,8 @@ class Houses
  * @ORM\GeneratedValue(strategy="IDENTITY")
  *
  */
-    #[Groups(['read:collection'])]
+        #[Groups(['read:collection'])]
     private $id;
-
 
 /**
  * @var string
@@ -197,19 +192,19 @@ class Houses
  * })
  */
 
-    #[Groups(['read:collection'])]
+    #[Groups(['read:collection', 'write:Post'])]
     private $idUser;
 
 /**
  * @ORM\Column(type="datetime", nullable=true)
  */
-    #[Groups(['read:collection'])]
+    #[Groups(['read:collection', 'write:Post'])]
     private $dateDebut;
 
 /**
  * @ORM\Column(type="datetime", nullable=true)
  */
-    #[Groups(['read:collection'])]
+    #[Groups(['read:collection', 'write:Post'])]
     private $dateFin;
 
 /**
@@ -218,14 +213,11 @@ class Houses
     #[Groups(['read:collection', 'write:Post'])]
     private $listIdEquipements = [];
 
-
-
 /**
  * @ORM\Column(type="string", length=255)
  */
     #[Groups(['read:collection', 'write:Post'])]
     private $categorie;
-
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -239,7 +231,8 @@ class Houses
     private $fileUrl;
 
 /*fonction qui permet de changer la date de l'image*/
-    public function __construct(){
+    function __construct()
+    {
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -268,213 +261,209 @@ class Houses
     #[Groups(['read:collection'])]
     private $updatedAt;
 
-
-    public function getId(): ?int
+    function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getAddress(): ?string
+    function getAddress(): ?string
     {
         return $this->address;
     }
 
-    public function setAddress(string $address): self
+    function setAddress(string $address): self
     {
         $this->address = $address;
 
         return $this;
     }
 
-    public function getZipcode(): ?int
+    function getZipcode(): ?int
     {
         return $this->zipcode;
     }
 
-    public function setZipcode(int $zipcode): self
+    function setZipcode(int $zipcode): self
     {
         $this->zipcode = $zipcode;
 
         return $this;
     }
 
-    public function getCity(): ?string
+    function getCity(): ?string
     {
         return $this->city;
     }
 
-    public function setCity(string $city): self
+    function setCity(string $city): self
     {
         $this->city = $city;
 
         return $this;
     }
 
-    public function getStatus(): ?bool
+    function getStatus(): ?bool
     {
         return $this->status;
     }
 
-    public function setStatus(bool $status): self
+    function setStatus(bool $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getNbbeds(): ?int
+    function getNbbeds(): ?int
     {
         return $this->nbbeds;
     }
 
-    public function setNbbeds(int $nbbeds): self
+    function setNbbeds(int $nbbeds): self
     {
         $this->nbbeds = $nbbeds;
 
         return $this;
     }
 
-    public function getPrice(): ?int
+    function getPrice(): ?int
     {
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    function setPrice(int $price): self
     {
         $this->price = $price;
 
         return $this;
     }
 
-    public function getTax(): ?int
+    function getTax(): ?int
     {
         return $this->tax;
     }
 
-    public function setTax(int $tax): self
+    function setTax(int $tax): self
     {
         $this->tax = $tax;
 
         return $this;
     }
 
-    public function getListidActivities(): ?array
+    function getListidActivities(): ?array
     {
         return $this->listidActivities;
     }
 
-    public function setListidActivities(array $listidActivities): self
+    function setListidActivities(array $listidActivities): self
     {
         $this->listidActivities = $listidActivities;
 
         return $this;
     }
 
-    public function getListidTags(): ?array
+    function getListidTags(): ?array
     {
         return $this->listidTags;
     }
 
-    public function setListidTags(array $listidTags): self
+    function setListidTags(array $listidTags): self
     {
         $this->listidTags = $listidTags;
 
         return $this;
     }
 
-
-
-    public function getIdUser(): ?User
+    function getIdUser(): ?User
     {
         return $this->idUser;
     }
 
-    public function setIdUser(?User $idUser): self
+    function setIdUser(?User $idUser): self
     {
         $this->idUser = $idUser;
 
         return $this;
     }
 
-    public function getDateDebut(): ?\DateTimeInterface
+    function getDateDebut(): ?\DateTimeInterface
     {
         return $this->dateDebut;
     }
 
-    public function setDateDebut(?\DateTimeInterface$dateDebut): self
+    function setDateDebut(?\DateTimeInterface$dateDebut): self
     {
         $this->dateDebut = $dateDebut;
 
         return $this;
     }
 
-    public function getDateFin(): ?\DateTimeInterface
+    function getDateFin(): ?\DateTimeInterface
     {
         return $this->dateFin;
     }
 
-    public function setDateFin(?\DateTimeInterface$dateFin): self
+    function setDateFin(?\DateTimeInterface$dateFin): self
     {
         $this->dateFin = $dateFin;
 
         return $this;
     }
 
-    public function getListIdEquipements(): ?array
+    function getListIdEquipements(): ?array
     {
         return $this->listIdEquipements;
     }
 
-    public function setListIdEquipements(?array $listIdEquipements): self
+    function setListIdEquipements(?array $listIdEquipements): self
     {
         $this->listIdEquipements = $listIdEquipements;
 
         return $this;
     }
 
-    public function getCategorie(): ?string
+    function getCategorie(): ?string
     {
         return $this->categorie;
     }
 
-    public function setCategorie(string $categorie): self
+    function setCategorie(string $categorie): self
     {
         $this->categorie = $categorie;
 
         return $this;
     }
 
-
-    public function getFilePath(): ?string
+    function getFilePath(): ?string
     {
         return $this->filePath;
     }
 
-    public function setFilePath(?string $filePath): self
+    function setFilePath(?string $filePath): self
     {
         $this->filePath = $filePath;
 
@@ -484,7 +473,7 @@ class Houses
     /**
      * @return File|null
      */
-    public function getFile(): ?File
+    function getFile(): ?File
     {
         return $this->file;
     }
@@ -493,30 +482,30 @@ class Houses
      * @param File|null $file
      * @return Houses
      */
-    public function setFile(?File $file): Houses
+    function setFile(?File $file): Houses
     {
         $this->file = $file;
         return $this;
     }
-    
-    public function getCreatedAt(): ?\DateTimeInterface
+
+    function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    function setCreatedAt(\DateTimeInterface$createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    function setUpdatedAt(\DateTimeInterface$updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -526,7 +515,7 @@ class Houses
     /**
      * @return string|null
      */
-    public function getFileUrl(): ?string
+    function getFileUrl(): ?string
     {
         return $this->fileUrl;
     }
@@ -535,14 +524,10 @@ class Houses
      * @param string|null $fileUrl
      * @return Houses
      */
-    public function setFileUrl(?string $fileUrl): Houses
+    function setFileUrl(?string $fileUrl): Houses
     {
         $this->fileUrl = $fileUrl;
         return $this;
     }
-
-
-
-
 
 }
