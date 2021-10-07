@@ -5,14 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\api\ApiController;
-use App\Controller\ProfileController;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -29,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: [
     'profile' => [
         'pagination_enabled' => false,
-        'path' => '/{id}/profile',
+        'path' => '/profile/{id}',
         'method' => 'get',
         'controller' => ApiController::class,
         'read' => false,

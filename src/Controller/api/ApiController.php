@@ -11,9 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\User;
-use App\Entity\Houses;
 use App\Entity\Categories;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/api")
@@ -30,9 +28,8 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/profile", name="api_logged_user_profile",
+     * @Route("/profile/{id}", name="api_logged_user_profile",
      *      methods={"GET"})
-     * @ParamConverter("user" , options={"mapping": {"id" : "id"}})
      * @return JsonResponse
      */
     public function profile(User $user)
