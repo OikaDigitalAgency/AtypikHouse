@@ -12,41 +12,22 @@ use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Annotation\ApiFilter;
+
+
 
 
 /**
  * User
- *
+ * @ApiFilter(SearchFilter::class, properties={"email":"exact"}))
  * @ORM\Table(name="user")
  * @ORM\Entity
  * @UniqueEntity(
  *     fields={"email"},
  *     message="Adresse mail déjà utilisé")
  */
-#[ApiResource(
-    collectionOperations: [
-    'profile' => [
-        'pagination_enabled' => false,
-        'path' => '/profile/{id}',
-        'method' => 'get',
-        'controller' => ApiController::class,
-        'read' => false,
-        'openapi_context' => [
-            'security' => [['bearerAuth' => []]]
-        ]
-    ]
-],
-    itemOperations: [
-    'get' => [
-        'controller' => NotFoundAction::class,
-        'openapi_context' => ['summary' => 'hidden'],
-        'read' => false,
-        'output' => false
-    ]
-],
-    normalizationContext: ['groups' => ['read:User']],
-    security: 'is_granted("ROLE_USER")',
-)]
+#[ApiResource()]
 class User implements UserInterface, EncoderAwareInterface
 {
     /**
